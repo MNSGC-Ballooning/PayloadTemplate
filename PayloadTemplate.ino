@@ -7,8 +7,14 @@
 #include <TinyGPS.h>
 #include <Relay_XBee.h>
 
+#define dataLED 0
+#define xBeeLED 1
+#define chipSelect 8
+
+
+
 void setup() {
-  
+  SDsetup();
 }
 
 void loop() {
