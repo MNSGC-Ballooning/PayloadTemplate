@@ -9,15 +9,18 @@
 
 #define dataLED 0
 #define xBeeLED 1
+#define gpsRx 2
+#define gpsTx 3
+#define xBeeRx 4
+#define xBeeTx 5
 #define chipSelect 8
-
-
 
 void setup() {
   SDsetup();
+  sensorSetup();
 }
 
 void loop() {
-  
+  updateSensors();
 }
 
