@@ -9,7 +9,7 @@ unsigned long fixAge;
 
 void sensorSetup() {
   gpsSerial.begin(9600);
-  String header = "GPS Date,GPS time,Lat,Lon,Alt (m),# Sats,";
+  String header = "GPS Date,GPS Time,Lat,Lon,Alt (m),# Sats,";
   logData(header);
 }
 
@@ -32,5 +32,9 @@ void updateSensors() {
     data += String(lat, 4) + "," + String(lon, 4) + "," + String(alt, 1) + "," + String(sats) + ",";
     logData(data);
   }
+}
+
+String getGPSdatetime() {
+  return String(month) + "/" + String(day) + "/" + String(year) + "," + String(hour) + ":" + String(minute) + ":" + String(second);
 }
 

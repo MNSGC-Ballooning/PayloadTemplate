@@ -15,12 +15,16 @@
 #define xBeeTx 5
 #define chipSelect 8
 
+const String ID = "TEAM";
+
 void setup() {
   SDsetup();
   sensorSetup();
+  xBeeSetup();
 }
 
 void loop() {
   updateSensors();
+  xBeeCommand();
 }
 
