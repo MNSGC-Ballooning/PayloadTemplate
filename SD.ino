@@ -58,3 +58,16 @@ void closeRadiolog() {
       digitalWrite(dataLED, LOW);
   }
 }
+
+void logData(String data) {
+  openDatalog();
+  datalog.println(data);
+  closeDatalog();
+}
+
+void logRadio(String message) {
+  openRadiolog();
+  radiolog.println(message);
+  closeRadiolog();
+}
+
