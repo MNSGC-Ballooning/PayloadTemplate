@@ -1,12 +1,14 @@
+//global variables for SD functions
 File datalog, radiolog;
 char datalogName[] = "SENSOR00.csv";
 char radiologName[] = "RADIO00.csv";
 bool datalogOpen = false, radiologOpen = false;
 
+//standard SD initialization procedure
 void SDsetup() {
   pinMode(10, OUTPUT);
-  if (!SD.begin(chipSelect)) {
-    while(true) {
+  if (!SD.begin(chipSelect)) {  //Display an error if SD communication fails
+    while(true) { //Note that this error loop is never broken - check for slow blinking LEDs before flying
       digitalWrite(dataLED, HIGH);
       digitalWrite(radioLED, HIGH);
       delay(500);
@@ -15,13 +17,13 @@ void SDsetup() {
       delay(500);
     }
   }
-  else {
+  else {  //file creation process
     for (byte i = 0; i < 100; i++) {
       datalogName[6] = '0' + i/10;
       datalogName[7] = '0' + i%10;
       radiologName[5] = '0' + i/10;
       radiologName[6] = '0' + i%10;
-      if (!SD.exists(datalogName) && !SD.exists(radiologName)) {
+      if (!SD.exists(datalogName) && !SD.exists(radiologName)) {  //make sure both file names are available before opening them
         openDatalog();
         openRadiolog();
         break;
@@ -30,6 +32,7 @@ void SDsetup() {
   }
 }
 
+//functions to change file state (open/closed) and handle the appropriate status LED
 void openDatalog() {
   if (!datalogOpen) {
     datalog = SD.open(datalogName, FILE_WRITE);
@@ -66,6 +69,7 @@ void closeRadiolog() {
   }
 }
 
+//functions that handle both opening and closing of files when logging data to ensure it is saved properly
 void logData(String data) {
   openDatalog();
   datalog.println(data);
