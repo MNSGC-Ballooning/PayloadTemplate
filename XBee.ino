@@ -8,17 +8,27 @@ void xBeeSetup() {
 }
 
 void sendXBee(String message) {
+  digitalWrite(radioLED, HIGH);
   xBee.send(message);
+  digitalWrite(radioLED, LOW);
   String data = getGPSdatetime() + ",TX," + message;
   logRadio(data);
+}
+
+void beacon(String data) {
+  digitalWrite(radioLED, HIGH);
+  xBee.send(data);
+  digitalWrite(radioLED, LOW);
 }
 
 void xBeeCommand() {
   String command = xBee.receive();
   if (command.equals("")) return;
   else {
+    digitalWrite(radioLED, HIGH);
     String data = getGPSdatetime() + ",RX," + command;
     logRadio(data);
+    digitalWrite(radioLED, LOW);
   }
   if (command.equals("Something")) {
     //doSomething();

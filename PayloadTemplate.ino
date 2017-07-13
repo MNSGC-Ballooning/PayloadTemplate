@@ -8,7 +8,7 @@
 #include <Relay_XBee.h>
 
 #define dataLED 0
-#define xBeeLED 1
+#define radioLED 1
 #define gpsRx 2
 #define gpsTx 3
 #define xBeeRx 4

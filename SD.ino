@@ -6,7 +6,14 @@ bool datalogOpen = false, radiologOpen = false;
 void SDsetup() {
   pinMode(10, OUTPUT);
   if (!SD.begin(chipSelect)) {
-    //SD error code
+    while(true) {
+      digitalWrite(dataLED, HIGH);
+      digitalWrite(radioLED, HIGH);
+      delay(500);
+      digitalWrite(dataLED, LOW);
+      digitalWrite(radioLED, LOW);
+      delay(500);
+    }
   }
   else {
     for (byte i = 0; i < 100; i++) {

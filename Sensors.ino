@@ -34,7 +34,7 @@ void updateSensors() {
     data += String(lat, 4) + "," + String(lon, 4) + "," + String(alt, 1) + "," + String(sats) + ",";
     logData(data);
     if (counter == 10) {
-      xBee.send(data);
+      beacon(data);
       counter = 0;
     }
   }
