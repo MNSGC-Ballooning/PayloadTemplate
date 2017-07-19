@@ -3,6 +3,7 @@ SoftwareSerial gpsSerial = SoftwareSerial(gpsRx, gpsTx);
 TinyGPS gps;
 unsigned long timer = 0;
 byte counter = 0;
+int cycle = 0;
 
 //variables that gps data will be written to
 float lat, lon, alt;
@@ -13,7 +14,8 @@ unsigned long fixAge;
 //setup function for gps and other sensors
 void sensorSetup() {
   gpsSerial.begin(9600);
-  String header = "GPS Date,GPS Time,Lat,Lon,Alt (m),# Sats,";  //this file goes at top of datalog. Add other sensor data to end
+  //this line goes at top of datalog. Add other sensor data to end
+  String header = "ID,Cycle,Hour,Min,Sec,Lat,Lon,Alt,Sats,Sensor1,Sensor2,Sensor3,Sensor4,Special1,Special2,Checksum";
   logData(header);
   //other sensor setup goes here
 }
@@ -39,11 +41,10 @@ void updateSensors() {
   if (millis() - timer > 1000) {
     timer = millis();
     counter++;
-    String data = String(month) + "/" + String(day) + "/" + String(year) + ",";
-    data += String(hour) + ":" + String(minute) + ":" + String(second) + ",";
-    data += String(lat, 4) + "," + String(lon, 4) + "," + String(alt, 1) + "," + String(sats) + ",";
-    //add extra sensor data as needed here
-    logData(data);
+    cycle++;
+    String data = getSensorData();
+    String sum = String(checksum(data));
+    logData(data + "," + sum);
     
     //once per 10 logging cycles, send most recent data to ground
     if (counter == 10) {
@@ -53,8 +54,25 @@ void updateSensors() {
   }
 }
 
-//function to quickly get most recent gps date and time as a single string
-String getGPSdatetime() {
-  return String(month) + "/" + String(day) + "/" + String(year) + "," + String(hour) + ":" + String(minute) + ":" + String(second);
+byte checksum(String data) {
+  byte sum = 0;
+  for(int i=0; i < data.length(); i++) {
+    sum += byte(data.charAt(i));
+  }
+  return checksum;
+}
+
+//function to quickly get most recent gps time in hour,min,sec format
+String getGPStime() {
+  return String(hour) + "," + String(minute) + "," + String(second);
+}
+
+//function to assemble sensor data for logging and transmit
+String getSensorData() {
+  String data = 
+  data += String(hour) + "," + String(minute) + "," + String(second) + ",";
+  data += String(lat, 4) + "," + String(lon, 4) + "," + String(alt, 1) + "," + String(sats) + ",";
+  //add additional sensor data as needed
+  return data;
 }
 
