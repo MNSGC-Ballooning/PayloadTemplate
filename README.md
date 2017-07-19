@@ -11,9 +11,9 @@ to skip to working on developing code to drive the components unique to their pa
 As written, the Payload Template sketch will already perform the following without modification:
 
 * Set up files for datalogging on an SD card, implemented using the built-in Arduino SD library.
-* Run a GPS sensor, implemented using the TinyGPS library.
+* Run a GPS sensor, implemented using the [TinyGPS](https://github.com/mikalhart/TinyGPS) library.
 * Log GPS sensor data to the SD card once per second.
-* Communicate with a relay payload via xBee, implemented using the Relay_XBee library.
+* Communicate with a relay payload via xBee, implemented using the [Relay_XBee](https://github.com/MNSGC-Ballooning/Relay-XBee) library.
 * Transmit GPS data to the relay once per 10 seconds.
 
 In addition, the sketch is organized so that the following can be added relatively easily:
