@@ -60,7 +60,7 @@ byte checksum(String data) {
   for(int i=0; i < data.length(); i++) {
     sum += byte(data.charAt(i));
   }
-  return checksum;
+  return sum;
 }
 
 //function to quickly get most recent gps time in hour,min,sec format
@@ -70,7 +70,7 @@ String getGPStime() {
 
 //function to assemble sensor data for logging and transmit
 String getSensorData() {
-  String data = 
+  String data = ID + "," + String(cycle) + ",";
   data += String(hour) + "," + String(minute) + "," + String(second) + ",";
   data += String(lat, 4) + "," + String(lon, 4) + "," + String(alt, 1) + "," + String(sats) + ",";
   //add additional sensor data as needed
