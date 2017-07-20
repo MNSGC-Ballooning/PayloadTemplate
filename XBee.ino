@@ -12,8 +12,7 @@ void xBeeSetup() {
 //function that simply beacons data to ground without logging
 void beacon(String data) {
   digitalWrite(radioLED, HIGH);
-  String sum = String(int(checksum(data)));
-  xBee.send(data + "," + sum);
+  xBee.send(data);
   digitalWrite(radioLED, LOW);
 }
 
@@ -39,9 +38,9 @@ void xBeeCommand() {
   //all commands go in a series of if-else statements; if a command matches a certain string, do a certain thing
   //keep commands short when possible - ~2-4 characters A-Z 0-9 only. At a minimum include ability to request data.
   if (command.equals("LAST")) {
-    //doSomething();
+    beacon(getSensorData());
   }
-  else if (command.equals("Other thing")) {
+  else if (command.equals("OtherThing")) {
     //doOtherThing();
   }
    else { //if received command doesn't match any expected strings, inform ground of error

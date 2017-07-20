@@ -15,7 +15,7 @@ unsigned long fixAge;
 void sensorSetup() {
   gpsSerial.begin(9600);
   //this line goes at top of datalog. Add other sensor data to end
-  String header = "ID,Cycle,Hour,Min,Sec,Lat,Lon,Alt,Sats,Sensor1,Sensor2,Sensor3,Sensor4,Special1,Special2,Checksum";
+  String header = "ID,Cycle,Hour,Min,Sec,Lat,Lon,Alt,Sats,Sensor1,Sensor2,Sensor3,Sensor4,Checksum,Special1,Special2";
   logData(header);
   //other sensor setup goes here
 }
@@ -43,8 +43,9 @@ void updateSensors() {
     counter++;
     cycle++;
     String data = getSensorData();
-    String sum = String(checksum(data));
-    logData(data + "," + sum);
+    String sum = String(checksum(data), DEC);
+    data += "," + sum;
+    logData(data);
     
     //once per 10 logging cycles, send most recent data to ground
     if (counter == 10) {
