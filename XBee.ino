@@ -40,8 +40,8 @@ void xBeeCommand() {
   if (command.equals("LAST")) {
     beacon(getSensorData());
   }
-  else if (command.equals("OtherThing")) {
-    //doOtherThing();
+  else if (command.equals("PING")) {
+    sendXBee("Pong");
   }
    else { //if received command doesn't match any expected strings, inform ground of error
      String message = "Error: " + command + " - command not recognized";

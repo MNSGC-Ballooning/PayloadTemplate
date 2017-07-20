@@ -47,8 +47,8 @@ void updateSensors() {
     data += "," + sum;
     logData(data);
     
-    //once per 10 logging cycles, send most recent data to ground
-    if (counter == 10) {
+    //once per 60 logging cycles, send most recent data to ground
+    if (counter == 60) {
       beacon(data);
       counter = 0;
     }
