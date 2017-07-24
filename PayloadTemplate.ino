@@ -17,6 +17,9 @@
 #define xBeeTx 5
 #define chipSelect 8
 
+//size of array to store data for logging. Increase or decrease as needed
+#define arraySize 100
+
 //ID for XBee communication. Choose something distinct relating to your payload, preferably short (2-4 characters, A-Z 0-9 only)
 const String ID = "ID";
 

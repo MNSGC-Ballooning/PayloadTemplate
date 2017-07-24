@@ -38,7 +38,9 @@ void xBeeCommand() {
   //all commands go in a series of if-else statements; if a command matches a certain string, do a certain thing
   //keep commands short when possible - ~2-4 characters A-Z 0-9 only. At a minimum include ability to request data.
   if (command.equals("LAST")) {
-    beacon(getSensorData());
+    char dataString[arraySize] = {0};
+    getSensorData(dataString);
+    beacon(dataString);
   }
   else if (command.equals("PING")) {
     sendXBee("Pong");

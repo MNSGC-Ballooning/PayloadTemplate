@@ -42,25 +42,16 @@ void updateSensors() {
     timer = millis();
     counter++;
     cycle++;
-    String data = getSensorData();
-    String sum = String(checksum(data), DEC);
-    data += "," + sum;
-    logData(data);
+    char dataString[arraySize] = {0};
+    getSensorData(dataString);
+    logData(dataString);
     
     //once per 60 logging cycles, send most recent data to ground
     if (counter == 60) {
-      beacon(data);
+      beacon(dataString);
       counter = 0;
     }
   }
-}
-
-byte checksum(String data) {
-  byte sum = 0;
-  for(int i=0; i < data.length(); i++) {
-    sum += byte(data.charAt(i));
-  }
-  return sum;
 }
 
 //function to quickly get most recent gps time in hour,min,sec format
@@ -69,11 +60,33 @@ String getGPStime() {
 }
 
 //function to assemble sensor data for logging and transmit
-String getSensorData() {
-  String data = ID + "," + String(cycle) + ",";
-  data += String(hour) + "," + String(minute) + "," + String(second) + ",";
-  data += String(lat, 4) + "," + String(lon, 4) + "," + String(alt, 1) + "," + String(sats) + ",";
+char* getSensorData(char dataString[]) {
+  byte pos = 0;
+  addData(ID, dataString, &pos);
+  addData(String(cycle), dataString, &pos);
+  addData(String(hour), dataString, &pos);
+  addData(String(minute), dataString, &pos);
+  addData(String(second), dataString, &pos);
+  addData(String(lat, 4), dataString, &pos);
+  addData(String(lon, 4), dataString, &pos);
+  addData(String(alt, 1), dataString, &pos);
+  addData(String(sats), dataString, &pos);
   //add additional sensor data as needed
-  return data;
+  //checksum
+  byte sum = 0;
+  for(byte i = 0; i < pos; i++) {
+    sum += byte(dataString[i]);
+  }
+  addData(String(sum), dataString, &pos);
+  return dataString;
 }
 
+void addData(String data, char dataString[], byte* pos) {
+  char arr[data.length() + 1];
+  data.toCharArray(arr, sizeof(arr));
+  arr[data.length()] = ',';
+  for (byte i = 0; i < sizeof(arr); i++) {
+    dataString[(*pos)] = arr[i];
+    (*pos)++;
+  }
+}
