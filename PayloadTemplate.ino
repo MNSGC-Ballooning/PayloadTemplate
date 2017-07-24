@@ -9,8 +9,8 @@
 #include <Relay_XBee.h>
 
 //Pin declarations
-#define dataLED 0
-#define radioLED 1
+#define dataLED A0
+#define radioLED A1
 #define gpsRx 2
 #define gpsTx 3
 #define xBeeRx 4
