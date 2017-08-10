@@ -13,7 +13,7 @@ unsigned long fixAge;
 //setup function for gps and other sensors
 void sensorSetup() {
   gpsSerial.begin(9600);
-  String header = "GPS Date,GPS Time,Lat,Lon,Alt (m),# Sats,";  //this file goes at top of datalog. Add other sensor data to end
+  String header = "GPS Time,Lat,Lon,Alt (m),# Sats,";  //this file goes at top of datalog. Add other sensor data to end
   logData(header);
   //other sensor setup goes here
 }
@@ -39,10 +39,14 @@ void updateSensors() {
   if (millis() - timer > 1000) {
     timer = millis();
     counter++;
-    String data = String(month) + "/" + String(day) + "/" + String(year) + ",";
-    data += String(hour) + ":" + String(minute) + ":" + String(second) + ",";
-    data += String(lat, 4) + "," + String(lon, 4) + "," + String(alt, 1) + "," + String(sats) + ",";
+
+    //build data String via concatination (Note that all code before next semicolon is treated as one line)
+    String data = String(hour) + ":" + String(minute) + ":" + String(second) + ","
+                + String(lat, 4) + "," + String(lon, 4) + "," + String(alt, 1) + "," + String(sats) + ","
     //add extra sensor data as needed here
+    
+    ; //end of data String
+    
     logData(data);
     
     //once per 10 logging cycles, send most recent data to ground
@@ -54,7 +58,7 @@ void updateSensors() {
 }
 
 //function to quickly get most recent gps date and time as a single string
-String getGPSdatetime() {
+String getGPStime() {
   return String(month) + "/" + String(day) + "/" + String(year) + "," + String(hour) + ":" + String(minute) + ":" + String(second);
 }
 

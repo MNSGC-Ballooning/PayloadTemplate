@@ -6,6 +6,7 @@ bool datalogOpen = false, radiologOpen = false;
 
 //standard SD initialization procedure
 void SDsetup() {
+  pinMode(dataLED, OUTPUT);
   pinMode(10, OUTPUT);
   if (!SD.begin(chipSelect)) {  //Display an error if SD communication fails
     while(true) { //Note that this error loop is never broken - check for slow blinking LEDs before flying

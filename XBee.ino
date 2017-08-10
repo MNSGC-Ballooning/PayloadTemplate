@@ -4,8 +4,9 @@ XBee xBee = XBee(&xBeeSerial, ID);
 
 //setup function for xBee
 void xBeeSetup() {
+  pinMode(radioLED, OUTPUT);
   xBee.begin(9600);
-  String header = "GPS Date,GPS Time,Type,Message";
+  String header = "GPS Time,Type,Message";
   logRadio(header);
 }
 
@@ -21,7 +22,7 @@ void sendXBee(String message) {
   digitalWrite(radioLED, HIGH);
   xBee.send(message);
   digitalWrite(radioLED, LOW);
-  String data = getGPSdatetime() + ",TX," + message;
+  String data = getGPStime() + ",TX," + message;
   logRadio(data);
 }
 
@@ -31,10 +32,11 @@ void xBeeCommand() {
   if (command.equals("")) return; //don't do anything if no command was received
   else {  //otherwise, log, then process the command
     digitalWrite(radioLED, HIGH);
-    String data = getGPSdatetime() + ",RX," + command;
+    String data = getGPStime() + ",RX," + command;
     logRadio(data);
     digitalWrite(radioLED, LOW);
   }
+  
   //all commands go in a series of if-else statements; if a command matches a certain string, do a certain thing
   //keep commands short when possible - ~2-4 characters A-Z 0-9 only. At a minimum include ability to request data.
   if (command.equals("Something")) {
