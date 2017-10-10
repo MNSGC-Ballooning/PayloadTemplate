@@ -1,20 +1,20 @@
 //global variables for SD functions
 File datalog, radiolog;
-char datalogName[] = "SENSOR00.csv";
-char radiologName[] = "RADIO00.csv";
+char datalogName[] = "Sensor00.csv";
+char radiologName[] = "Radio00.csv";
 bool datalogOpen = false, radiologOpen = false;
 
 //standard SD initialization procedure
 void SDsetup() {
-  pinMode(dataLED, OUTPUT);
-  pinMode(10, OUTPUT);
-  if (!SD.begin(chipSelect)) {  //Display an error if SD communication fails
+  pinMode(dataLED_pin, OUTPUT);
+  pinMode(chipSelect_pin, OUTPUT);
+  if (!SD.begin(chipSelect_pin)) {  //Display an error if SD communication fails
     while(true) { //Note that this error loop is never broken - check for slow blinking LEDs before flying
-      digitalWrite(dataLED, HIGH);
-      digitalWrite(radioLED, HIGH);
+      digitalWrite(dataLED_pin, HIGH);
+      digitalWrite(radioLED_pin, HIGH);
       delay(500);
-      digitalWrite(dataLED, LOW);
-      digitalWrite(radioLED, LOW);
+      digitalWrite(dataLED_pin, LOW);
+      digitalWrite(radioLED_pin, LOW);
       delay(500);
     }
   }
@@ -39,7 +39,7 @@ void openDatalog() {
     datalog = SD.open(datalogName, FILE_WRITE);
     datalogOpen = true;
     if (!radiologOpen)
-      digitalWrite(dataLED, HIGH);
+      digitalWrite(dataLED_pin, HIGH);
   }
 }
 
@@ -48,7 +48,7 @@ void openRadiolog() {
     radiolog = SD.open(radiologName, FILE_WRITE);
     radiologOpen = true;
     if (!datalogOpen)
-      digitalWrite(dataLED, HIGH);
+      digitalWrite(dataLED_pin, HIGH);
   }
 }
 
@@ -57,7 +57,7 @@ void closeDatalog() {
     datalog.close();
     datalogOpen = false;
     if(!radiologOpen)
-      digitalWrite(dataLED, LOW);
+      digitalWrite(dataLED_pin, LOW);
   }
 }
 
@@ -66,7 +66,7 @@ void closeRadiolog() {
     radiolog.close();
     radiologOpen = false;
     if(!datalogOpen)
-      digitalWrite(dataLED, LOW);
+      digitalWrite(dataLED_pin, LOW);
   }
 }
 

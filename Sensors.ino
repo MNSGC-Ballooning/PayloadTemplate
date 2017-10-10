@@ -1,5 +1,4 @@
 //global variables for gps and sensor logging
-SoftwareSerial gpsSerial = SoftwareSerial(gpsRx, gpsTx);
 TinyGPS gps;
 unsigned long timer = 0;
 byte counter = 0;
@@ -12,7 +11,7 @@ unsigned long fixAge;
 
 //setup function for gps and other sensors
 void sensorSetup() {
-  gpsSerial.begin(9600);
+  gps_Serial.begin(9600);
   String header = "GPS Time,Lat,Lon,Alt (m),# Sats,";  //this file goes at top of datalog. Add other sensor data to end
   logData(header);
   //other sensor setup goes here
@@ -22,8 +21,8 @@ void sensorSetup() {
 void updateSensors() {
   //read gps data, check for new NMEA strings
   bool newData = false;
-  while(gpsSerial.available() > 0) {
-    if(gps.encode(gpsSerial.read()))
+  while(gps_Serial.available() > 0) {
+    if(gps.encode(gps_Serial.read()))
       newData = true;
   }
   //if new string is received, update gps variables
@@ -33,7 +32,10 @@ void updateSensors() {
     gps.crack_datetime(&year, &month, &day, &hour, &minute, &second, &hundreth, &fixAge);
     sats = gps.satellites();
   }
+  //---------------------------------------------
   //other repeated sensor processing goes here
+
+  //---------------------------------------------
   
   //once per second, log gps and sensor data
   if (millis() - timer > 1000) {
@@ -43,8 +45,10 @@ void updateSensors() {
     //build data String via concatination (Note that all code before next semicolon is treated as one line)
     String data = String(hour) + ":" + String(minute) + ":" + String(second) + ","
                 + String(lat, 4) + "," + String(lon, 4) + "," + String(alt, 1) + "," + String(sats) + ","
-    //add extra sensor data as needed here
-    
+                //---------------------------------------------
+                //add extra sensor data as needed here
+
+                //---------------------------------------------
     ; //end of data String
     
     logData(data);

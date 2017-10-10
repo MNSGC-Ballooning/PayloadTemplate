@@ -28,38 +28,52 @@ part of the developers.
 
 ## Wiring for the sketch
 
-The Payload Template sketch was built to be run on an Arduino Uno. However, it should be easy to
-port to other boards, and in fact for large projects this is recommended - this sketch uses about
-70% of both program storage and RAM on the Uno, and leaves only two digital pins unused.
+The Payload Template sketch was built to be run on an Arduino Mega. However, it should be easy to
+port to other boards with comperable or larger available memory. Although it is possible to run
+this sketch on an Uno, it already uses about 70% of both program storage and RAM and leaves only two
+digital pins unused, allowing little room for additional features of specific projects.
 
 As written, the sketch assumes the following digital pin connections. Entries in **bold** are
 fixed by hardware or library specifications, while those in *italics* are strongly recommended,
-but can be moved if needed.
+but can be moved if needed. If a pin isn't listed, it's available without restriction.
 
-0. *open*
-1. *open*
-2. GPS RX
-3. GPS TX - SoftwareSerial connection
-4. XBee RX
-5. XBee TX - SoftwareSerial connection
-6. open
-7. open
-8. Chip Select - Fixed for the shield this was developed on, but could be moved with a breakout.
-9. data LED - flashes when data is written to the SD card.
-10. *radio LED* - flashes when transmitting or receiving xBee communication.
-11. **SD MOSI**
-12. **SD MISO**
-13. **SD SCK** - SPI limited to these pins, but more devices can be added, as it is a data bus.
+### USB pins*
 
-*Note:* Pins 0 and 1 are *technically* open for use; however, they are shard by the USB port when
-uploading code, and may cause problems when connected to sensors. Only use as a last resort.
-Pin 10 can be moved, but must remain an output pin for SPI (including SD) connection to work.
+0. *reserved*
+1. *reserved*
+
+### LED Pins
+
+6. data LED
+7. radio LED
+
+### Serial Pins**
+
+16. *GPS TX*
+17. *GPS RX*
+18. *XBee TX*
+19. *XBee RX*
+
+### SD Pins
+
+50. **SD MISO**
+51. **SD MOSI**
+52. **SD SCK** - SPI limited to these pins, but more devices can be added, as it is a data bus.
+53. *SD Chip Select* - Chip Select can be moved, but pin 53 must be an output for SD library to work.
+
+*Pins 0 and 1 are *technically* open for use; however, they are shared by the USB port when
+uploading code, and may cause problems when connected to sensors. Since the Mega has over 50  other
+digital pins, it's best to just avoid these unless required by a shield or library.  
+**The Mega has 3 hardware serial lines that should be used first for any serial connection.
+However, the order doesn't matter and if necessary the SoftwareSerial library can be used to move
+these connections to other pins.
+
 
 ## Using this template
 
-Simply download the zip file and extract the contents to your project folder. Rename the sketch file
-and folder to something appropriate for your project.  You will also need to assign a unique ID
-to the xBee via the constant String variable in the [main sketch file.](PayloadTemplate.ino)
+Simply download the zip file and extract the contents to your project folder. Rename **both** the
+sketch file and folder to something appropriate for your project.  You will also need to assign a
+unique ID to the xBee via the constant String variable in the [main sketch file.](PayloadTemplate.ino)
 From there, make whatever edits and additions you need for your project.
 
 Please don't clone this repository unless you wish to make changes to the template itself, as this
