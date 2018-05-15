@@ -1,17 +1,12 @@
 //global variables for gps and sensor logging
-TinyGPS gps;
+FlightGPS gps = FlightGPS(&gps_Serial); //Adafruit module
+//UbloxGPS gps = UbloxGPS(&gps_Serial); //Ublox module
 unsigned long timer = 0;
 byte counter = 0;
 
-//variables that gps data will be written to
-float lat, lon, alt;
-int sats, year;
-byte month, day, hour, minute, second, hundreth;
-unsigned long fixAge;
-
 //setup function for gps and other sensors
 void sensorSetup() {
-  gps_Serial.begin(9600);
+  gps.initialize();
   String header = "GPS Time,Lat,Lon,Alt (m),# Sats,";  //this file goes at top of datalog. Add other sensor data to end
   logData(header);
   //other sensor setup goes here
@@ -19,19 +14,8 @@ void sensorSetup() {
 
 //called repeatedly during loop()
 void updateSensors() {
-  //read gps data, check for new NMEA strings
-  bool newData = false;
-  while(gps_Serial.available() > 0) {
-    if(gps.encode(gps_Serial.read()))
-      newData = true;
-  }
-  //if new string is received, update gps variables
-  if (newData) {
-    gps.f_get_position(&lat, &lon, &fixAge);
-    alt = gps.f_altitude();
-    gps.crack_datetime(&year, &month, &day, &hour, &minute, &second, &hundreth, &fixAge);
-    sats = gps.satellites();
-  }
+  //check for new gps data
+  gps.update();
   //---------------------------------------------
   //other repeated sensor processing goes here
 
@@ -43,8 +27,9 @@ void updateSensors() {
     counter++;
 
     //build data String via concatination (Note that all code before next semicolon is treated as one line)
-    String data = String(hour) + ":" + String(minute) + ":" + String(second) + ","
-                + String(lat, 4) + "," + String(lon, 4) + "," + String(alt, 1) + "," + String(sats) + ","
+    String data = String(gps.getHour()) + ":" + String(gps.getMinute()) + ":" + String(gps.getSecond()) + ","
+                + String(gps.getLat(), 4) + "," + String(gps.getLon(), 4) + "," + String(gps.getAlt(), 1) + ","
+                + String(gps.getSats()) + ","
                 //---------------------------------------------
                 //add extra sensor data as needed here
 
@@ -63,6 +48,7 @@ void updateSensors() {
 
 //function to quickly get most recent gps date and time as a single string
 String getGPStime() {
-  return String(month) + "/" + String(day) + "/" + String(year) + "," + String(hour) + ":" + String(minute) + ":" + String(second);
+  return String(gps.getMonth()) + "/" + String(gps.getDay()) + "/" + String(gps.getYear()) + ","
+          + String(gps.getHour()) + ":" + String(gps.getMinute()) + ":" + String(gps.getSecond());
 }
 

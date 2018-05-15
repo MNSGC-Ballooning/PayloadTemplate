@@ -4,8 +4,8 @@
 
 //Libraries needed
 #include <SD.h>
-#include <SoftwareSerial.h>
-#include <TinyGPS.h>
+#include <FlightGPS.h>  //Adafruit module
+//#include <UbloxGPS.h> //Ublox module
 #include <Relay_XBee.h>
 
 //Pin declarations
